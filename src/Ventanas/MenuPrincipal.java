@@ -38,7 +38,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Image getIconImage(){
     Toolkit miPantalla = Toolkit.getDefaultToolkit();
     Image miIcono = miPantalla.getImage("src/Img/icon.jpg");
-setIconImage(miIcono);
+    setIconImage(miIcono);
     return miIcono ;
     }
     
@@ -130,7 +130,7 @@ setIconImage(miIcono);
                 Panel_Ventanas.repaint();
             }
         });
-        //hola
+        
         BotonCompras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

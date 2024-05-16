@@ -4,10 +4,7 @@ package interfaces;
 import Modelo.ModeloCompras;
 import java.util.List;
 
-/**
- *
- * @author arman
- */
+
 public interface InterfaceCompras {
     public void Registrar(ModeloCompras producto);
     public void Modificar(ModeloCompras producto);

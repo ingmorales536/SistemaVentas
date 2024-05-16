@@ -12,23 +12,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 
 
-/**
- *
- * @author arman
- */
+
 public class ComprasImpl  extends Conexion implements  InterfaceCompras{
 
     @Override
     public void Registrar(ModeloCompras producto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       
     }
 
     @Override
     public void Modificar(ModeloCompras producto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+           try{
+            Conectar();
+            PreparedStatement stmt = this.conexion.prepareStatement("UPDATE compras SET fecha = ?  ,  proveedor = ? , articulos = ? , total = ? , vendedor = ? WHERE id = ?");
+          
+            stmt.setString(1,producto.getFecha());
+            stmt.setString(2,producto.getProveedor());
+            stmt.setString(3,producto.getArticulos());
+            stmt.setFloat(4,producto.getTotal());
+            stmt.setString(5,producto.getVendedor());
+            stmt.setInt(6, producto.getId());
+            stmt.execute();
+            stmt.close();  
+                
+        }catch(Exception e){
+               System.out.println(e);
+            
+        }finally{
+            try {
+                CerrarConexion();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al Cerrar la conexion BD", "Error en DB-Clientes", 0);
+            }
+        }
     }
 
     @Override
@@ -54,7 +74,7 @@ public class ComprasImpl  extends Conexion implements  InterfaceCompras{
              ComprasRegistradas.setId(ResultadosCompras.getInt("id"));
              ComprasRegistradas.setFecha(ResultadosCompras.getString("fecha"));
              ComprasRegistradas.setProveedor(ResultadosCompras.getString("proveedor"));
-             ComprasRegistradas.setTotal(ResultadosCompras.getDouble("total"));
+             ComprasRegistradas.setTotal(ResultadosCompras.getFloat("total"));
              ComprasRegistradas.setVendedor(ResultadosCompras.getString("vendedor"));
              lista.add(ComprasRegistradas);
              

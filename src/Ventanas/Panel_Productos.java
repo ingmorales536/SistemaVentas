@@ -76,12 +76,12 @@ public class Panel_Productos extends javax.swing.JPanel {
                    
                 }else{
                         JOptionPane.showMessageDialog(null,
-                "<html><body><h3 style='color:red;'>Seleccione un Producto</h3>",
-                "Error-Editar",
-                JOptionPane.ERROR_MESSAGE);
-                }
+                        "<html><body><h3 style='color:red;'>Seleccione un Producto</h3>",
+                        "Error-Editar",
+                        JOptionPane.ERROR_MESSAGE);
+                    }
            }
-       });//Fin del botonEditar
+        });//Fin del botonEditar
        
        BotonEliminar.addActionListener(new ActionListener() {
            @Override

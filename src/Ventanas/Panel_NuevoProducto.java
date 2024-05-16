@@ -72,11 +72,7 @@ ModeloProductos userEdition;
              
              
              if(Codigo.isEmpty() && Descripcion.isEmpty() && PrecioCompra.isEmpty() && PrecioVenta2.isEmpty() && Cantidad.isEmpty() ){
-                txtCodigo.setBackground(Color.red);
-                 txtDescripcion.setBackground(Color.red);
-                 txtPrecioCompra.setBackground(Color.red);
-                 txtPrecioVenta.setBackground(Color.red);
-                 txtCantidad.setBackground(Color.red);
+
                  JOptionPane.showMessageDialog(null, "Ingrese todos los datos","Error-Ingresar Cliente",0);
                  
                  
@@ -111,12 +107,6 @@ ModeloProductos userEdition;
     
     
     private void Limpiar(){
-                 txtCantidad.setBackground(Color.white);
-                 txtDescripcion.setBackground(Color.white);
-                 txtPrecioCompra.setBackground(Color.white);
-                 txtPrecioVenta.setBackground(Color.white);
-                 txtCantidad.setBackground(Color.white);
-                 
                  txtCantidad.setText("");
                  txtDescripcion.setText("");
                  txtPrecioCompra.setText("");

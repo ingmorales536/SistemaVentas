@@ -3,6 +3,7 @@ package Ventanas;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import ConexionDB.Conexion;
+import Modelo.ModeloCompras;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -21,6 +22,10 @@ import javax.swing.table.DefaultTableModel;
  * @author arman
  */
 public class Panel_NuevaCompra extends javax.swing.JPanel {
+
+boolean isEdition = false;
+ModeloCompras userEdition;
+ 
     
 private DefaultTableModel modelo;
 Conexion c = new Conexion();
@@ -37,6 +42,38 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");
         ObtenerProveedores();
         LogicaBotones();         
     }//Fin del constructor
+    
+    
+    public Panel_NuevaCompra(ModeloCompras compras) throws SQLException{
+        initComponents();
+        DiseñoVentana();
+        DiseñoTabla();
+        ObtenerProveedores();
+        LogicaBotones(); 
+        isEdition = true;
+        userEdition = compras;
+        InitStyles();
+    
+    }//Fin del 2 constructor
+    
+    
+         
+        private void InitStyles() {
+        
+        if (isEdition) {
+            Label_title.setText("Editar Compra");
+            BotonFinalizar.setText("Guardar");
+
+            if (userEdition != null) {
+                ComboBoxProveedores.addItem(userEdition.getProveedor());                  
+            }
+        }
+    }//Fin del metodo estilos
+    
+    
+    
+    
+    
     
     
        private void DiseñoTabla(){

@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableCellRenderer;
 import Implementaciones.ComprasImpl;
 import interfaces.InterfaceCompras;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -49,6 +50,29 @@ public class Panel_Compras extends javax.swing.JPanel {
                 }
             }
         });
+        
+        BotonEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if(TablaCompras.getSelectedRow() > -1){
+                   int userId = (int) TablaCompras.getValueAt(TablaCompras.getSelectedRow(),0);
+                   InterfaceCompras dao = new ComprasImpl();
+                    try {        
+                        MenuPrincipal.ShowJPanel(new Panel_NuevaCompra(dao.getUserById(userId)));
+                    } catch (Exception ex) {
+                        System.out.println("Error desde compras" );
+                    }
+                   
+                }else{
+                        JOptionPane.showMessageDialog(null,
+                        "<html><body><h3 style='color:red;'>Seleccione un proveedor</h3>",
+                        "Error-Editar",
+                        JOptionPane.ERROR_MESSAGE);
+                    }
+                 
+            }
+        });//Fin del boton Editar
     
     
     }  

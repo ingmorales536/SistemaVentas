@@ -9,18 +9,31 @@ public class ModeloCompras {
     private int id;
     private String proveedor;
     private String fecha;
-    private double subtotal;
-    private double total;
+    private String vendedor;
+    private float total;
+
+    public void setVendedor(String vendedor) {
+        this.vendedor = vendedor;
+    }
+  
+    
+    
+    
+
+    public String getArticulos() {
+        return articulos;
+    }
+
+    public void setArticulos(String articulos) {
+        this.articulos = articulos;
+    }
+    private String articulos;
 
     public String getVendedor() {
         return vendedor;
     }
 
-    public void setVendedor(String vendedor) {
-        this.vendedor = vendedor;
-    }
-    private String vendedor;
-
+  
   
     //setters
     public void setId(int id) {
@@ -35,11 +48,8 @@ public class ModeloCompras {
         this.fecha = fecha;
     }
 
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    public void setTotal(double total) {
+  
+    public void setTotal(float total) {
         this.total = total;
     }
     
@@ -57,11 +67,9 @@ public class ModeloCompras {
         return fecha;
     }
 
-    public double getSubtotal() {
-        return subtotal;
-    }
+   
 
-    public double getTotal() {
+    public float getTotal() {
         return total;
     }
  

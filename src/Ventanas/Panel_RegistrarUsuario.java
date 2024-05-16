@@ -66,9 +66,6 @@ ModeloUsuarios userEdition;
         String permiso = (String) BoxPermiso.getSelectedItem();
         
          if(Nombre.isEmpty() && Usuario.isEmpty() && Password1.isEmpty() ){
-                txtNombre.setBackground(Color.red);
-                txtUsuario.setBackground(Color.red);
-                txtPassword.setBackground(Color.red);
                 JOptionPane.showMessageDialog(null, "Ingrese todos los datos","Error-Ingresar Cliente",0);
     
              }else{
