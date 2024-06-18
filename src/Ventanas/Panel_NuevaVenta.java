@@ -18,6 +18,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import ConexionDB.Conexion;
+import Implementaciones.ProveedoresImpl;
+import interfaces.InterfaceProveedores;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.text.JTextComponent;
@@ -32,29 +34,109 @@ public  int TotalC;
     public Panel_NuevaVenta() {
 
         initComponents();
-           DiseñoTabla();
-           tablaModelo = new DefaultTableModel();
-           tablaModelo.addColumn("Cantidad");
-           tablaModelo.addColumn("Código");
-           tablaModelo.addColumn("Descripción");
-           tablaModelo.addColumn("Precio Compra");
-           tablaModelo.addColumn("Precio Venta");
-           tablaModelo.addColumn("Eliminar");
-           // Asignar el modelo de datos al TablaNuevaVenta
-           TablaNuevaVenta.setModel(tablaModelo);
-           TablaNuevaVenta.setEnabled(false);
-           ComboBoxSugerencia.setEditable(false);
- 
+           
+          
+           
+            DiseñoTabla();
             MostrarSugerencias();
             InsertarProductoTabla();
             SumaTotal();
             LogicaBotones();
-            //AgregarSugerenciaLabel();
+            EliminarArticulo();
 
     }//Fin del constructor
+
     
+    
+    private void InsertarProductoTabla(){
+
+    ComboBoxSugerencia.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                Object selectedItem = ComboBoxSugerencia.getSelectedItem();
+                if (selectedItem != null) {
+                    try {
+                       InsertarSugerenciaTabla(selectedItem.toString());
+
+                    } catch (SQLException ex) {
+                        System.out.println(ex);
+                    }
+                   
+                }   
+            }
+            txtBuscarArticulo.setText("");
+        }
+    });
+    
+   txtBuscarArticulo.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                Object selectedItem = ComboBoxSugerencia.getSelectedItem();
+                if (selectedItem != null) {
+                    try {
+                       InsertarSugerenciaTabla(selectedItem.toString());
+                    } catch (SQLException ex) {
+                        System.out.println(ex);
+                    }          
+                    txtBuscarArticulo.setText("");
+                }   
+            }
+        }
+    });
+    
+}//Fin del método InsertarProductoEnLaTabla
+
+    private void EliminarArticulo(){
         
-    private void DiseñoTabla(){
+        BotonEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                                if(TablaNuevaVenta.getSelectedRow() > -1){ 
+                
+                   DefaultTableModel model = (DefaultTableModel) TablaNuevaVenta.getModel();
+                   InterfaceProveedores dao = new ProveedoresImpl();
+               for(int x : TablaNuevaVenta.getSelectedRows()){
+                   
+                   try{
+                     int option = JOptionPane.showConfirmDialog(null, "¿Desea Eliminar el Articulo?", "Confirmación", JOptionPane.YES_NO_OPTION);
+
+                                 if (option == JOptionPane.YES_OPTION) {
+                                    dao.Eliminar((int) TablaNuevaVenta.getValueAt(x, 0));
+                                    model.removeRow(x);
+                                 }
+                                 
+                   }catch(Exception error){
+                       System.out.println(error);
+                   }
+                   
+               }
+            }else{
+                    JOptionPane.showMessageDialog(null,
+                "<html><body><h3 style='color:red;'>Seleccione un Articulo</h3>",
+                "Error-Eliminar",
+                JOptionPane.ERROR_MESSAGE);
+                
+                }
+            }
+        });
+        
+    }
+
+  
+        
+    public void DiseñoTabla(){
+         tablaModelo = new DefaultTableModel();
+           tablaModelo.addColumn("Cantidad");
+           tablaModelo.addColumn("Código");
+           tablaModelo.addColumn("DESCRIPCION");
+           tablaModelo.addColumn("PRECIO COMPRA");
+           tablaModelo.addColumn("PRECIO VENTA");
+           tablaModelo.addColumn("ITEMS DISPONIBLES");
+           // Asignar el modelo de datos al TablaNuevaVenta
+           TablaNuevaVenta.setModel(tablaModelo);
+           ComboBoxSugerencia.setEditable(false);
     // Configurar el renderizador para los encabezados
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
         headerRenderer.setBackground(java.awt.Color.black); // Color de fondo
@@ -64,9 +146,11 @@ public  int TotalC;
         for (int i = 0; i < TablaNuevaVenta.getColumnCount(); i++) {
             TablaNuevaVenta.getTableHeader().getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
         }
+        
 
     }//Fin del Metodo DiseñoTabla
- 
+    
+
     
     private void LogicaBotones(){
     BotonFinalizar.addActionListener(new ActionListener() {
@@ -93,14 +177,16 @@ public  int TotalC;
     
     
    private void MostrarSugerencias(){
-        
+       
     ((JTextComponent) txtBuscarArticulo).getDocument().addDocumentListener(new DocumentListener() {
         @Override
         public void insertUpdate(DocumentEvent e) {
             try {
+                
                 ObtenerSugerencias();
             } catch (SQLException ex) {
                 System.out.println(ex);
+               
             }
         }
 
@@ -121,6 +207,8 @@ public  int TotalC;
                 System.out.println(ex);
             }
         }
+
+    
     });
     
     
@@ -128,6 +216,7 @@ public  int TotalC;
 
 
 private void ObtenerSugerencias() throws SQLException {
+    
     String keyword = ((JTextComponent) txtBuscarArticulo).getText().trim();
     List<String> sugerencias = ObtenerSugerenciaBD(keyword);
     
@@ -140,45 +229,6 @@ private void ObtenerSugerencias() throws SQLException {
 }//Fin del método ObtenerSugerencia
 
     
-private void InsertarProductoTabla(){
-
-    ComboBoxSugerencia.addKeyListener(new KeyAdapter() {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                Object selectedItem = ComboBoxSugerencia.getSelectedItem();
-                if (selectedItem != null) {
-                    try {
-                       InsertarSugerenciaTabla(selectedItem.toString());
-                    } catch (SQLException ex) {
-                        System.out.println(ex);
-                    }
-                    ComboBoxSugerencia.removeAllItems();
-                    ComboBoxSugerencia.setPopupVisible(false);
-                }   
-            }
-        }
-    });
-    
-   txtBuscarArticulo.addKeyListener(new KeyAdapter() {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                Object selectedItem = ComboBoxSugerencia.getSelectedItem();
-                if (selectedItem != null) {
-                    try {
-                       InsertarSugerenciaTabla(selectedItem.toString());
-                    } catch (SQLException ex) {
-                        System.out.println(ex);
-                    }
-                    ComboBoxSugerencia.removeAllItems();
-                    ComboBoxSugerencia.setPopupVisible(false);
-                }   
-            }
-        }
-    });
-    
-}//Fin del método InsertarProductoEnLaTabla
 
 
 private void SumaTotal(){
@@ -307,6 +357,7 @@ private void actualizarSubTotal() {
         LabelTotal = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        BotonEliminar = new javax.swing.JButton();
 
         Panel_Background.setBackground(new java.awt.Color(35, 35, 35));
         Panel_Background.setMinimumSize(new java.awt.Dimension(750, 430));
@@ -329,7 +380,7 @@ private void actualizarSubTotal() {
         Boton_registroVentas.setBorder(null);
 
         txtBuscarArticulo.setBackground(new java.awt.Color(35, 35, 35));
-        txtBuscarArticulo.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtBuscarArticulo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtBuscarArticulo.setForeground(new java.awt.Color(255, 255, 255));
         txtBuscarArticulo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtBuscarArticulo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Buscar Articulo", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
@@ -341,22 +392,19 @@ private void actualizarSubTotal() {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(ComboBoxSugerencia, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(140, 140, 140)
+                .addGap(10, 10, 10)
                 .addComponent(txtBuscarArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53)
+                .addGap(180, 180, 180)
                 .addComponent(Boton_registroVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Boton_registroVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(ComboBoxSugerencia, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(txtBuscarArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(7, 7, 7)
-                .addComponent(Boton_registroVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ComboBoxSugerencia, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscarArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         TablaNuevaVenta.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
@@ -408,10 +456,10 @@ private void actualizarSubTotal() {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(LabelTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(LabelSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
-                .addGap(132, 132, 132))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LabelSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                    .addComponent(LabelTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,48 +476,64 @@ private void actualizarSubTotal() {
         jSeparator2.setForeground(new java.awt.Color(35, 35, 35));
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
+        BotonEliminar.setBackground(new java.awt.Color(35, 35, 35));
+        BotonEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar2.png"))); // NOI18N
+        BotonEliminar.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Eliminar Articulo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+
         javax.swing.GroupLayout Panel_BackgroundLayout = new javax.swing.GroupLayout(Panel_Background);
         Panel_Background.setLayout(Panel_BackgroundLayout);
         Panel_BackgroundLayout.setHorizontalGroup(
             Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel_BackgroundLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jSeparator1))
+                .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator2))
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jSeparator1)
+                        .addGap(28, 28, 28)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BotonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43))
             .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(Panel_BackgroundLayout.createSequentialGroup()
-                        .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_BackgroundLayout.createSequentialGroup()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(107, 107, 107)
-                                .addComponent(jSeparator2)
-                                .addGap(112, 112, 112)
-                                .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(24, 24, 24)
-                                .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(43, 43, 43))
-                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(23, 23, 23))))
+                        .addComponent(jScrollPane1)
+                        .addGap(43, 43, 43))))
         );
         Panel_BackgroundLayout.setVerticalGroup(
             Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                .addGap(36, 36, 36)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-                .addGap(26, 26, 26))
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                                .addGap(47, 47, 47)))
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                        .addGap(56, 56, 56))
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BotonEliminar)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         BotonCancelar.getAccessibleContext().setAccessibleDescription("Cnacelar");
@@ -493,6 +557,7 @@ private void actualizarSubTotal() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonCancelar;
+    private javax.swing.JButton BotonEliminar;
     private javax.swing.JButton BotonFinalizar;
     private javax.swing.JButton Boton_registroVentas;
     private javax.swing.JComboBox<String> ComboBoxSugerencia;

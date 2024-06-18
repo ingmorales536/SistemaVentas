@@ -166,7 +166,6 @@ public class Panel_Proveedores extends javax.swing.JPanel {
         jSeparator2.setForeground(new java.awt.Color(35, 35, 35));
 
         TablaProveedores.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
-        TablaProveedores.setForeground(new java.awt.Color(0, 0, 0));
         TablaProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -193,7 +192,7 @@ public class Panel_Proveedores extends javax.swing.JPanel {
         BotonNuevo.setBackground(new java.awt.Color(35, 35, 35));
         BotonNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Nuevo.png"))); // NOI18N
         BotonNuevo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        BotonNuevo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BotonNuevo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         BotonNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BotonNuevoActionPerformed(evt);
@@ -203,12 +202,12 @@ public class Panel_Proveedores extends javax.swing.JPanel {
         BotonEliminar.setBackground(new java.awt.Color(35, 35, 35));
         BotonEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar2.png"))); // NOI18N
         BotonEliminar.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Eliminar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        BotonEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BotonEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         BotonEditar.setBackground(new java.awt.Color(35, 35, 35));
         BotonEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar.png"))); // NOI18N
         BotonEditar.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        BotonEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BotonEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         txtBuscarCliente.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         txtBuscarCliente.setHorizontalAlignment(javax.swing.JTextField.CENTER);
