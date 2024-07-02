@@ -62,14 +62,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
         BotonNuevaVenta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               Panel_NuevaVenta Ventana1 = new Panel_NuevaVenta();
-                Ventana1.setSize(963, 580);
-                Ventana1.setLocation(0, 0);
+               Panel_NuevaVenta Ventana1;
+                try {
+                    Ventana1 = new Panel_NuevaVenta();
+                    Ventana1.setSize(963, 580);
+                    Ventana1.setLocation(0, 0);
 
-                Panel_Ventanas.removeAll();
-                Panel_Ventanas.add(Ventana1,BorderLayout.CENTER);
-                Panel_Ventanas.revalidate();
-                Panel_Ventanas.repaint();
+                    Panel_Ventanas.removeAll();
+                    Panel_Ventanas.add(Ventana1,BorderLayout.CENTER);
+                    Panel_Ventanas.revalidate();
+                    Panel_Ventanas.repaint();
+                } catch (SQLException ex) {
+                    System.out.println("Error en mostrar nueva venta: " + ex);
+                }
+               
                 
             }
         });  //Fin Accion boton Nueva Venta
@@ -180,6 +186,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 bot.setVisible(true);
             }
         });
+        
+        Boton_registroVentas.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+           MenuPrincipal.ShowJPanel(new Panel_VentasDelDia());
+            }
+        });
+        
     }//Fin del metodo Accion de botones
     
     //Metodo mostrar un panel dentro de otro panel
@@ -224,6 +238,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         Panel_Fecha = new javax.swing.JPanel();
+        Boton_registroVentas = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         Label_Fecha = new javax.swing.JLabel();
         BotonSoporte = new javax.swing.JButton();
@@ -384,6 +399,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         Panel_Fecha.setBackground(new java.awt.Color(27, 27, 27));
 
+        Boton_registroVentas.setBackground(new java.awt.Color(27, 27, 27));
+        Boton_registroVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RegistroVentas.png"))); // NOI18N
+        Boton_registroVentas.setBorder(null);
+
         jLabel2.setFont(new java.awt.Font("UD Digi Kyokasho NK-R", 0, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Sesion de {user}");
@@ -406,7 +425,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(Panel_FechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Label_Fecha, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(311, 311, 311)
+                .addGap(216, 216, 216)
+                .addComponent(Boton_registroVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(BotonSoporte, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
@@ -416,10 +437,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addComponent(Label_Fecha)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 2, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(Panel_FechaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(BotonSoporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(Panel_FechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Panel_FechaLayout.createSequentialGroup()
+                        .addComponent(Boton_registroVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(BotonSoporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -488,6 +513,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton BotonSalir;
     private javax.swing.JButton BotonSoporte;
     private javax.swing.JButton BotonUsuarios;
+    private javax.swing.JButton Boton_registroVentas;
     private javax.swing.JLabel Label_Fecha;
     private javax.swing.JPanel Panel_Background;
     private javax.swing.JPanel Panel_Fecha;

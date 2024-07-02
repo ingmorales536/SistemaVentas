@@ -102,6 +102,13 @@ ModeloProductos userEdition;
               
             }
         });
+        
+        BotonRegresar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              MenuPrincipal.ShowJPanel(new Panel_Productos());
+            }
+        });
     
     }//Fin del metodo registrar producto
     
@@ -137,6 +144,7 @@ ModeloProductos userEdition;
         txtCodigo = new javax.swing.JTextField();
         Label_ImagenProducto = new javax.swing.JLabel();
         BotonRegistrar = new javax.swing.JButton();
+        BotonRegresar = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(35, 35, 35));
 
@@ -190,63 +198,67 @@ ModeloProductos userEdition;
         BotonRegistrar.setText("Registrar");
         BotonRegistrar.setBorder(null);
 
+        BotonRegresar.setBackground(new java.awt.Color(35, 35, 35));
+        BotonRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Regresar.png"))); // NOI18N
+        BotonRegresar.setBorder(null);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(62, 62, 62)
+                .addGap(10, 10, 10)
+                .addComponent(BotonRegresar)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Label_Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
+                        .addGap(19, 19, 19)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(txtCodigo)
                             .addComponent(txtDescripcion)
-                            .addComponent(txtPrecioCompra))))
-                .addGap(18, 18, 18)
+                            .addComponent(txtPrecioCompra))
+                        .addGap(15, 15, 15)))
+                .addGap(3, 3, 3)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtPrecioVenta)
+                    .addComponent(txtCantidad)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                    .addComponent(txtPrecioVenta))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Label_ImagenProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BotonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                        .addGap(3, 3, 3)))
+                .addGap(6, 6, 6)
+                .addComponent(Label_ImagenProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                 .addGap(12, 12, 12))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(BotonRegresar))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(Label_Titulo)
+                .addGap(58, 58, 58)
+                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(txtPrecioCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jSeparator1)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
                 .addGap(6, 6, 6))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(Label_Titulo)
-                        .addGap(49, 49, 49)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
-                        .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Label_ImagenProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(112, 112, 112)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(90, 90, 90)
-                                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtPrecioVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(93, 93, 93)
-                        .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(275, 275, 275)
-                .addComponent(txtPrecioCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(112, 112, 112)
+                .addComponent(txtPrecioVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(93, 93, 93)
+                .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(Label_ImagenProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -268,6 +280,7 @@ ModeloProductos userEdition;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonRegistrar;
+    private javax.swing.JButton BotonRegresar;
     private javax.swing.JLabel Label_ImagenProducto;
     private javax.swing.JLabel Label_Titulo;
     private javax.swing.JPanel jPanel1;
