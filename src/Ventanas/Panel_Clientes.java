@@ -46,10 +46,11 @@ public class Panel_Clientes extends javax.swing.JPanel {
         try{
             InterfaceClientes dao = new ClientesImpl();
             DefaultTableModel model = (DefaultTableModel) TablaClientes.getModel();
-            dao.listar("").forEach(u -> model.addRow(new Object[]{u.getId(),u.getNombre(),u.getApellidoPaterno(),u.getApellidoMaterno(),u.getTelefono(),u.getDireccion()}));
+            dao.listar("").forEach(u -> model.addRow(new Object[]{u.getId(),u.getNombre(),u.getApellidoPaterno(),u.getApellidoMaterno(),u.getTelefono(),u.getDireccion(),u.getDescuento()}));
             
         }catch(Exception e){
-            System.out.println(e);
+            JOptionPane.showMessageDialog(null,"Error al cargar cliente","ERROR",0);
+            System.out.println("Error en el panel clientes: " + e);
         }
     }//Fin de cargarclientes
 
@@ -145,11 +146,11 @@ public class Panel_Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "NOMBRE", "APELLIDO PA.", "APELLIDO MA.", "TELEFONO", "DIRECCION"
+                "ID", "NOMBRE", "APELLIDO PA.", "APELLIDO MA.", "TELEFONO", "DIRECCION", "DESCUENTO (%)"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

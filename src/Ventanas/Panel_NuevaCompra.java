@@ -273,6 +273,7 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");
     private void LimpiarTabla(){
         JOptionPane.showMessageDialog(null,"Compra Registrada", "Registro-Compra", HEIGHT, iconoFinalizado);
         modelo.setRowCount(0);
+        Label_Total.setText("Total: $0.0");
     
     }
     

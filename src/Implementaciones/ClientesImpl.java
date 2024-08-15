@@ -22,13 +22,14 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
         try{
             
             Conectar();
-            PreparedStatement stmt = this.conexion.prepareStatement("INSERT INTO clientes(nombre, apellidopaterno, apellidomaterno, telefono, direccion) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement stmt = this.conexion.prepareStatement("INSERT INTO clientes(nombre, apellidopaterno, apellidomaterno, telefono, direccion, descuento) VALUES (?, ?, ?, ?, ?, ?)");
           
             stmt.setString(1,cliente.getNombre());
             stmt.setString(2,cliente.getApellidoPaterno());
             stmt.setString(3,cliente.getApellidoMaterno());
             stmt.setString(4,cliente.getTelefono());
             stmt.setString(5,cliente.getDireccion());
+            stmt.setString(6,cliente.getDescuento());
             stmt.execute();
             stmt.close();  
 
@@ -54,14 +55,15 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
     public void Modificar(ModeloClientes cliente) {
         try{
             Conectar();
-            PreparedStatement stmt = this.conexion.prepareStatement("UPDATE clientes SET nombre = ? , apellidopaterno = ? , apellidomaterno = ? , telefono = ?, direccion = ? WHERE id = ?");
+            PreparedStatement stmt = this.conexion.prepareStatement("UPDATE clientes SET nombre = ? , apellidopaterno = ? , apellidomaterno = ? , telefono = ?, direccion = ? , descuento = ? WHERE id = ?");
           
             stmt.setString(1,cliente.getNombre());
             stmt.setString(2,cliente.getApellidoPaterno());
             stmt.setString(3,cliente.getApellidoMaterno());
             stmt.setString(4,cliente.getTelefono());
             stmt.setString(5,cliente.getDireccion());
-            stmt.setInt(6, cliente.getId());
+            stmt.setString(6,cliente.getDescuento());
+            stmt.setInt(7, cliente.getId());
             stmt.execute();
             stmt.close();  
                         JOptionPane.showMessageDialog(null,
@@ -125,6 +127,7 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
              ClientesRegistrados.setApellidoMaterno(ResultadosClientes.getString("apellidomaterno"));
              ClientesRegistrados.setTelefono(ResultadosClientes.getString("telefono"));
              ClientesRegistrados.setDireccion(ResultadosClientes.getString("direccion"));
+             ClientesRegistrados.setDescuento(ResultadosClientes.getString("descuento"));
              lista.add(ClientesRegistrados);
              
           }//fin del while
@@ -161,6 +164,7 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
              ClientesRegistrados.setApellidoMaterno(ResultadosClientes.getString("apellidomaterno"));
              ClientesRegistrados.setTelefono(ResultadosClientes.getString("telefono"));
              ClientesRegistrados.setDireccion(ResultadosClientes.getString("direccion"));
+             ClientesRegistrados.setDescuento(ResultadosClientes.getString("descuento"));
           }//fin del while
           
          ResultadosClientes.close();

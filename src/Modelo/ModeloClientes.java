@@ -9,6 +9,15 @@ public class ModeloClientes {
    private String ApellidoMaterno;
    private String telefono;
    private String direccion;
+   private String descuento;
+
+    public String getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(String descuento) {
+        this.descuento = descuento;
+    }
 
    
    //setter

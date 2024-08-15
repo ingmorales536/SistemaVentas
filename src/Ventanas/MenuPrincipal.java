@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.JPanel; 
 
 
 
@@ -32,6 +32,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         BotonSoporte.setFocusPainted(false); // Evitar que se pinte el borde al tener el foco
         BotonSoporte.setContentAreaFilled(false);
     }//fin del constructor
+    
+ 
  
     
     @Override

@@ -22,47 +22,58 @@ import Implementaciones.ProveedoresImpl;
 import interfaces.InterfaceProveedores;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static java.awt.image.ImageObserver.HEIGHT;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.text.JTextComponent;
 //----------------------------------------------------------------------------------//
 
 public class Panel_NuevaVenta extends javax.swing.JPanel {
-  
+    
+//Variables para hacer la conexion y obtener datos
+Conexion con = new Conexion();
+Connection conexion = con.Conectar();
+PreparedStatement stmt;
+ResultSet resultSet;
+//-------------------------
+public String descuento;
+double Descuento ;
+//------------------------
 private DefaultTableModel tablaModelo; 
 public  int C;
 public  int TotalC;
+ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icono para JOptionPane
+int cantidadDeseada;
 
     public Panel_NuevaVenta() throws SQLException {
 
         initComponents();   
-            DiseñoTabla();
-            MostrarSugerencias();
-            InsertarProductoTabla();
-            SumaTotal();
-            LogicaBotones();
-            EliminarArticulo();
-            ObtenerClientes();
-
+        DiseñoTabla();
+        MostrarSugerencias();
+        InsertarProductoTabla();
+        SumaTotal();
+        LogicaBotones();
+        EliminarArticulo();
+        DescuentoTotal();
+        ObtenerClientes();
     }//Fin del constructor
+    
 
-    private void ObtenerClientes() throws SQLException{
-        Conexion con = new Conexion();
-        Connection c = con.Conectar();
-        
-        PreparedStatement stmt = c.prepareStatement("SELECT nombre,apellidopaterno FROM clientes");
+
+    private void ObtenerClientes() throws SQLException{     
+        stmt = conexion.prepareStatement("SELECT nombre,apellidopaterno FROM clientes");
         ResultSet resultSet = stmt.executeQuery();
             while (resultSet.next()) {
                 String nombre = resultSet.getNString("nombre");
                 String apellido = resultSet.getNString("apellidopaterno");
-                ComboBoxClientes.addItem(nombre +" "+ apellido);
+                ComboBoxClientes.addItem(nombre);
             }
             resultSet.close();
             stmt.close();
-            c.close();
-        
-        
-    
-    }
+
+    }//fin del metodo ObtenerClientes
     
     private void InsertarProductoTabla(){
 
@@ -76,7 +87,7 @@ public  int TotalC;
                        InsertarSugerenciaTabla(selectedItem.toString());
 
                     } catch (SQLException ex) {
-                        System.out.println(ex);
+                        System.out.println("Error al insertar el producto a la tabla: " + ex);
                     }
                    
                 }   
@@ -149,6 +160,7 @@ public  int TotalC;
            tablaModelo.addColumn("DESCRIPCION");
            tablaModelo.addColumn("PRECIO COMPRA");
            tablaModelo.addColumn("PRECIO VENTA");
+           tablaModelo.addColumn("PRECIO + DESCUENTO");
            tablaModelo.addColumn("ITEMS DISPONIBLES");
            // Asignar el modelo de datos al TablaNuevaVenta
            TablaNuevaVenta.setModel(tablaModelo);
@@ -172,8 +184,8 @@ public  int TotalC;
     BotonFinalizar.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          JOptionPane.showMessageDialog(null, "Venta realizada");
-          tablaModelo.setRowCount(0);
+          JOptionPane.showMessageDialog(null,"Venta Realizada", "Registro-Compra", HEIGHT, iconoFinalizado);
+          tablaModelo.setRowCount(0);    
         }
     });
     BotonCancelar.addActionListener(new ActionListener() {
@@ -213,6 +225,7 @@ public  int TotalC;
         @Override
         public void changedUpdate(DocumentEvent e) {
             try {
+                
                 ObtenerSugerencias();
             } catch (SQLException ex) {
                 System.out.println(ex);
@@ -239,30 +252,23 @@ private void ObtenerSugerencias() throws SQLException {
     
 }//Fin del método ObtenerSugerencia
 
-    
-
-
-
-    
-
  
    private List<String> ObtenerSugerenciaBD(String keyword) throws SQLException {
-        Conexion con = new Conexion();
-        con.Conectar();
         List<String> sugerencias = new ArrayList<>();
-        
         try {
-            Connection connection =  con.Conectar();
-            PreparedStatement stmt = connection.prepareStatement("SELECT descripcion FROM productos WHERE descripcion LIKE ?");
+    
+            stmt = conexion.prepareStatement("SELECT descripcion FROM productos WHERE descripcion LIKE ?");
             stmt.setString(1, "%" + keyword + "%");
-            ResultSet resultSet = stmt.executeQuery();
+             resultSet = stmt.executeQuery();
             while (resultSet.next()) {
-                sugerencias.add(resultSet.getString("descripcion"));
+                sugerencias.add(resultSet.getString("descripcion")); 
             }
             resultSet.close();
             stmt.close();
+           
+            
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("metodo(ObtenerSugerenciaBD): "+  e);
             JOptionPane.showMessageDialog(null, "Error al obtener sugerencias desde la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
         }
         return sugerencias;
@@ -271,36 +277,59 @@ private void ObtenerSugerencias() throws SQLException {
    
 
 private void InsertarSugerenciaTabla(String selectedItem) throws SQLException {
-    Conexion con = new Conexion();
     con.Conectar();
-      
+    double PrecioVenta = 0.0;
+    double precioFinal = 0.0;
+    double operacion = 0.0;
+    
     try {
-        Connection connection =  con.Conectar();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM productos WHERE descripcion = ?");
-        statement.setString(1, selectedItem);
-        ResultSet resultSet = statement.executeQuery();
-            
+        // Preparar la consulta para obtener los datos del producto seleccionado
+        stmt = conexion.prepareStatement("SELECT * FROM productos WHERE descripcion = ?");
+        stmt.setString(1, selectedItem);
+        ResultSet resultSet = stmt.executeQuery();
+        
         while (resultSet.next()) {
-            int id = resultSet.getInt("id");
+            String id = resultSet.getString("id");
             String codigo = resultSet.getString("codigo");
             String descripcion = resultSet.getString("descripcion");
             double precioCompra = resultSet.getDouble("preciounitario");
             double precioVenta = resultSet.getDouble("precioventa");
-            int items = resultSet.getInt("cantidad");
-            C = Integer.parseInt(JOptionPane.showInputDialog(null,"Ingrese la cantidad"));
-            tablaModelo.addRow(new Object[]{C, codigo, descripcion, precioCompra, precioVenta,items});
-            
-        }
-        resultSet.close();
-        statement.close();
-    } catch (SQLException e) {  
+            int itemsDisponibles = resultSet.getInt("cantidad");
+
+            // Obtener la cantidad deseada por el usuario
+            int cantidadDeseada = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la cantidad"));
+            System.out.println(cantidadDeseada);
+               
+            // Validar la cantidad ingresada
+            if (cantidadDeseada > 0 && cantidadDeseada <= itemsDisponibles) {
+                // Calcular el precioFinal para la primera vez
+                PrecioVenta = precioVenta; // Asumimos que PrecioVenta es igual a precioVenta la primera vez
+                operacion = (PrecioVenta * Descuento) / 100;
+                precioFinal = PrecioVenta - operacion;
+                System.out.println("-----Precio final: " + precioFinal);
+                
+                // Agregar el artículo a la tabla
+                DefaultTableModel modelo = (DefaultTableModel) TablaNuevaVenta.getModel();
+                modelo.addRow(new Object[]{cantidadDeseada, codigo, descripcion, precioCompra, precioVenta, precioFinal, itemsDisponibles});
+             
+            } else if (cantidadDeseada > itemsDisponibles) {
+                JOptionPane.showMessageDialog(null, "Items insuficientes", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Agregue un Articulo", "Error", JOptionPane.ERROR_MESSAGE);      
+            }
+        }//fin del while
         
+        resultSet.close();
+        stmt.close();
+        
+    } catch (SQLException e) {
         System.out.println(e);
         JOptionPane.showMessageDialog(null, "Error al obtener datos desde la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-        
-    }//Fin del catch
-    
-}//Fin del metodo InsertarSugerenciaTabla
+    }
+}
+
+
+
 
 
 
@@ -311,7 +340,7 @@ private void SumaTotal(){
         public void tableChanged(TableModelEvent e) {
         actualizarTotal(); // Actualizar el total cuando se produzca un cambio en el modelo de datos
         actualizarTotalArtuculos();
-        Ganancias();
+        Ganancias();    
         }
     });
         
@@ -368,7 +397,37 @@ private void Ganancias(){
 }//fin del metodo ganancias
 
 
+public void ObtenerDescuento() throws SQLException{ 
+    String cliente = (String) ComboBoxClientes.getSelectedItem();
+    stmt = conexion.prepareStatement("SELECT descuento FROM clientes WHERE nombre = ?");
+    stmt.setString(1,cliente);
+    
+    resultSet = stmt.executeQuery();
+    while(resultSet.next()){
+        descuento = resultSet.getString("descuento");
+        Descuento = Double.parseDouble(descuento);
+        LabelDescuento.setText("Descuento: "+descuento +"%");
+    }
+}//fin del metodo descuento
 
+
+private void DescuentoTotal(){
+ComboBoxClientes.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            
+            ObtenerDescuento();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener el descuento", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+});
+
+
+
+}
 
 
 
@@ -397,6 +456,7 @@ private void Ganancias(){
         LabelArticulos = new javax.swing.JLabel();
         LabelGanancias = new javax.swing.JLabel();
         LabelTotal = new javax.swing.JLabel();
+        LabelDescuento = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         BotonEliminar = new javax.swing.JButton();
 
@@ -405,68 +465,44 @@ private void Ganancias(){
         Panel_Background.setPreferredSize(new java.awt.Dimension(750, 430));
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0,4));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        ComboBoxSugerencia.setBackground(new java.awt.Color(35, 35, 35));
         ComboBoxSugerencia.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        ComboBoxSugerencia.setForeground(new java.awt.Color(255, 255, 255));
         ComboBoxSugerencia.setMaximumRowCount(22);
-        ComboBoxSugerencia.setToolTipText("Sugerencias");
+        ComboBoxSugerencia.setToolTipText("Articulos");
         ComboBoxSugerencia.setBorder(null);
         ComboBoxSugerencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ComboBoxSugerenciaActionPerformed(evt);
             }
         });
+        jPanel1.add(ComboBoxSugerencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 330, 50));
 
         txtBuscarArticulo.setBackground(new java.awt.Color(35, 35, 35));
         txtBuscarArticulo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtBuscarArticulo.setForeground(new java.awt.Color(255, 255, 255));
         txtBuscarArticulo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtBuscarArticulo.setToolTipText("Buscar Articulos");
         txtBuscarArticulo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Buscar Articulo", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel1.add(txtBuscarArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 300, 60));
 
+        ComboBoxClientes.setBackground(new java.awt.Color(0, 0, 0));
         ComboBoxClientes.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        ComboBoxClientes.setForeground(new java.awt.Color(255, 255, 255));
         ComboBoxClientes.setBorder(null);
+        jPanel1.add(ComboBoxClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 20, 228, 50));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Cliente");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 0, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Articulos");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(120, 120, 120)
-                        .addComponent(jLabel2))
-                    .addComponent(ComboBoxSugerencia, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addComponent(txtBuscarArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addComponent(jLabel1))
-                    .addComponent(ComboBoxClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addGap(4, 4, 4)
-                .addComponent(ComboBoxSugerencia, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtBuscarArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(4, 4, 4)
-                .addComponent(ComboBoxClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, -1, -1));
 
         TablaNuevaVenta.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         TablaNuevaVenta.setModel(new javax.swing.table.DefaultTableModel(
@@ -474,11 +510,11 @@ private void Ganancias(){
 
             },
             new String [] {
-                "ID", "CODIGO", "DESCRIPCION", "PRECIOUNI", "PRECIOVENTA", "ITEMS"
+                "ID", "CODIGO", "DESCRIPCION", "PRECIOUNI", "PRECIOVENTA", "PRECIO + DESCUENTO", "ITEMS"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -512,13 +548,18 @@ private void Ganancias(){
 
         LabelGanancias.setFont(new java.awt.Font("Arial Black", 1, 26)); // NOI18N
         LabelGanancias.setForeground(new java.awt.Color(255, 255, 255));
-        LabelGanancias.setText("Ganancias :  0.0");
-        jPanel2.add(LabelGanancias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 320, -1));
+        LabelGanancias.setText("Ganancias :  0.00");
+        jPanel2.add(LabelGanancias, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 320, -1));
 
-        LabelTotal.setFont(new java.awt.Font("Arial Black", 1, 28)); // NOI18N
+        LabelTotal.setFont(new java.awt.Font("Arial Black", 1, 30)); // NOI18N
         LabelTotal.setForeground(new java.awt.Color(255, 255, 255));
-        LabelTotal.setText("Venta Total:  0.0");
-        jPanel2.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 283, -1));
+        LabelTotal.setText("Venta Total:  0.00");
+        jPanel2.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 320, -1));
+
+        LabelDescuento.setFont(new java.awt.Font("Arial Black", 0, 26)); // NOI18N
+        LabelDescuento.setForeground(new java.awt.Color(255, 255, 255));
+        LabelDescuento.setText("Descuento: 0%");
+        jPanel2.add(LabelDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, -1, -1));
 
         jSeparator2.setBackground(new java.awt.Color(35, 35, 35));
         jSeparator2.setForeground(new java.awt.Color(35, 35, 35));
@@ -534,23 +575,27 @@ private void Ganancias(){
             Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jScrollPane1)
                 .addGap(43, 43, 43))
             .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BotonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BotonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41))
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator2)
+                        .addContainerGap())))
         );
         Panel_BackgroundLayout.setVerticalGroup(
             Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -560,19 +605,19 @@ private void Ganancias(){
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
                 .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BotonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator2)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(65, 65, 65))
+                            .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(Panel_BackgroundLayout.createSequentialGroup()
+                        .addComponent(BotonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addComponent(jSeparator2)))
+                .addGap(25, 25, 25))
         );
 
         BotonCancelar.getAccessibleContext().setAccessibleDescription("Cnacelar");
@@ -601,6 +646,7 @@ private void Ganancias(){
     private javax.swing.JComboBox<String> ComboBoxClientes;
     private javax.swing.JComboBox<String> ComboBoxSugerencia;
     private javax.swing.JLabel LabelArticulos;
+    private javax.swing.JLabel LabelDescuento;
     private javax.swing.JLabel LabelGanancias;
     private javax.swing.JLabel LabelTotal;
     private javax.swing.JPanel Panel_Background;

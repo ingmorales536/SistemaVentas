@@ -55,7 +55,7 @@ String user;
             @Override
             public void actionPerformed(ActionEvent arg0) {
              String obtener_texto = Text_Ingresado.getText();
-             Chat_Area.append(user+"->"+obtener_texto+"\n"+"\n");
+             Chat_Area.append("Usuario"+"->"+obtener_texto+"\n"+"\n");
              Text_Ingresado.setText("");
              
              

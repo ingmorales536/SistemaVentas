@@ -256,51 +256,46 @@ public void BotonIniciar() throws SQLException{
         usuarioIngresado = Text_usuario.getText().trim();
         contrasenaIngresada = password_usuario.getText().trim();
         
-         if(usuarioIngresado.isEmpty() || contrasenaIngresada.isEmpty() ){
-                JOptionPane.showMessageDialog(null, "Ingrese todos los datos","ERROR",0);
-         }else{
+        if(usuarioIngresado.isEmpty() || contrasenaIngresada.isEmpty() ){
+            JOptionPane.showMessageDialog(null, "Ingrese todos los datos","ERROR",0);
+        }else{
           
-          try{
-             Connection conn = con.Conectar();
-             PreparedStatement stmt = conn.prepareStatement("SELECT permiso FROM usuarios WHERE usuario = '"+usuarioIngresado+"' AND contrasena = '"+contrasenaIngresada+"'");
+            try{
+                Connection conn = con.Conectar();
+                PreparedStatement stmt = conn.prepareStatement("SELECT permiso FROM usuarios WHERE usuario = '"+usuarioIngresado+"' AND contrasena = '"+contrasenaIngresada+"'");
           
-            ResultSet result = stmt.executeQuery();
-            while(result.next()){
-                String permiso1 = result.getString("permiso");
+                ResultSet result = stmt.executeQuery();
+                while(result.next()){
+                    String permiso1 = result.getString("permiso");
                 
-                if(permiso1.equalsIgnoreCase("Administrador")){             
-                      abrirVentanaProgreso();
-                      Cont=1;
-                }else if(permiso1.equalsIgnoreCase("Empleado")){
-                      abrirVentanaProgreso();
-                }else{
-                    JOptionPane.showMessageDialog(null, "Usuario o Contraseña Incorrecta","ERROR",0);
-                }//Fin del else 
-                
-            }//Fin del while result
-          stmt.close();
-          con.CerrarConexion();
-        } catch (SQLException err) {
-            System.err.println("Error al verificar usuario: " + err.getMessage());
-        
-        }
-          
-         
-         }
+                    if(permiso1.equalsIgnoreCase("Administrador")){             
+                        abrirVentanaProgreso();
+                        Cont=1;
+                    }else if(permiso1.equalsIgnoreCase("Empleado")){
+                        abrirVentanaProgreso();
+                    }
+                }//Fin del while result
+                stmt.close();
+                con.CerrarConexion();
+            }catch (SQLException err) {
+                System.err.println("Error al verificar usuario: " + err.getMessage());
+            }//fin del catch
+
+        }//fin del else
 
 }//Fin del metodo BotonIniciar
     
 
     
-     private void abrirVentanaProgreso() {
-        VentanaProgreso ventanaProgreso = new VentanaProgreso();
-        ventanaProgreso.setVisible(true);
-        // Cerrar la ventana actual de inicio de sesión
-        dispose();
-    }//fin del metodo abrirVentanaProgreso
+private void abrirVentanaProgreso() {
+    VentanaProgreso ventanaProgreso = new VentanaProgreso();
+    ventanaProgreso.setVisible(true);
+    // Cerrar la ventana actual de inicio de sesión
+    dispose();
+}//fin del metodo abrirVentanaProgreso
      
      //barra de carga
-    class VentanaProgreso extends JFrame {   
+class VentanaProgreso extends JFrame {   
     private JProgressBar progressBar;
     
     public VentanaProgreso() {
@@ -335,12 +330,11 @@ public void BotonIniciar() throws SQLException{
                     
                     if(Cont==1){
                      
-                    abrirVentanaAdmin();
-                    
-                    dispose();
+                        abrirVentanaAdmin(); 
+                        dispose();
                     }else{
-                    AbrirVentanaEmpleado();
-                     dispose();
+                        AbrirVentanaEmpleado();
+                        dispose();
                     }
                    
                 }//Fin del if progreso terminado
@@ -354,8 +348,8 @@ public void BotonIniciar() throws SQLException{
 
     
 private void abrirVentanaAdmin() {
-        new MenuPrincipal().setVisible(true);
-    }//metodoAbrir VentanaPrincipal
+    new MenuPrincipal().setVisible(true);
+}//metodoAbrir VentanaPrincipal
     
 private void AbrirVentanaEmpleado(){
     new MenuPrincipalEmpleado().setVisible(true);
