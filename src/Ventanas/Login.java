@@ -35,16 +35,17 @@ Conexion con = new Conexion();
 //usuario y contraseña ingresadas
 static String usuarioIngresado = "";
 String contrasenaIngresada = "";
-public int Cont = 0;
-public static String user = "";
+
+public int Cont = 0;//Metodo bandera
+
+public static String usuario;//Obtener usuario
   
     public Login() {
         setUndecorated(true);
         initComponents();
         DiseñoVentana();
-        CerrarVentana();
-        IniciarLogin();
-        BotonInicio();
+        LogicaBotones();
+        
     }//fin del constructor
     
     @Override
@@ -55,11 +56,43 @@ public static String user = "";
     return miIcono ;
     }
     
+
     
-    //Iniciar secion con el boton Enter
-    public void IniciarLogin(){
+    private void DiseñoVentana(){
+       
+        //diseñar la ventana con sus caracteristicas
+        setSize(842, 542);
+        setTitle("Acceso al sistema");
+        setLocationRelativeTo(null);
+        //poner la imagen de fondo
+        ImageIcon Wallpaper = new ImageIcon("src/Img/wallpaperPrincipal.png");
+        Icon icono = new ImageIcon(Wallpaper.getImage().getScaledInstance(Label_wallpaper.getWidth(),Label_wallpaper.getHeight(),Image.SCALE_DEFAULT));   
+        Label_wallpaper.setIcon(icono);
+        
+        
+        //agregar imagen al logo
+        ImageIcon wallpaper_logo = new ImageIcon("src/Img/logo.png");
+        Icon icono_logo = new ImageIcon(wallpaper_logo.getImage().getScaledInstance(label_logo.getWidth(), label_logo.getHeight(), Image.SCALE_DEFAULT));
+        label_logo.setIcon(icono_logo);
+        
+         BotonCerrar.setBorderPainted(false); // Ocultar el borde del botón
+         BotonCerrar.setFocusPainted(false); // Evitar que se pinte el borde al tener el foco
+         BotonCerrar.setContentAreaFilled(false);
+         
+    }//Fin del metodo DiseñoVentana
     
-        password_usuario.addKeyListener(new KeyAdapter() {
+    
+    
+    
+    private void LogicaBotones(){
+        BotonCerrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               System.exit(0);
+            }
+        });
+        
+          password_usuario.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
               
@@ -100,45 +133,21 @@ public static String user = "";
                 
             }//fin del metodo keypressed
         });
-    
-    }//Fin del metodo IniciarLogin
-    
-    private void DiseñoVentana(){
-       
-        //diseñar la ventana con sus caracteristicas
-        setSize(842, 542);
-        setResizable(false);
-        setTitle("Acceso al sistema");
-        setLocationRelativeTo(null);
-        //poner la imagen de fondo
-        ImageIcon Wallpaper = new ImageIcon("src/Img/wallpaperPrincipal.png");
-        Icon icono = new ImageIcon(Wallpaper.getImage().getScaledInstance(Label_wallpaper.getWidth(),Label_wallpaper.getHeight(),Image.SCALE_DEFAULT));   
-        Label_wallpaper.setIcon(icono);
-        this.repaint();
         
         
-        //agregar imagen al logo
-        ImageIcon wallpaper_logo = new ImageIcon("src/Img/logo.png");
-        Icon icono_logo = new ImageIcon(wallpaper_logo.getImage().getScaledInstance(label_logo.getWidth(), label_logo.getHeight(), Image.SCALE_DEFAULT));
-        label_logo.setIcon(icono_logo);
-        this.repaint();
-        
-         BotonCerrar.setBorderPainted(false); // Ocultar el borde del botón
-         BotonCerrar.setFocusPainted(false); // Evitar que se pinte el borde al tener el foco
-         BotonCerrar.setContentAreaFilled(false);
-    }//Fin del metodo DiseñoVentana
-    
-    
-    
-    private void CerrarVentana(){
-        BotonCerrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               System.exit(0);
+        Boton_Acceder.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+                try {
+                    BotonIniciar();
+                } catch (SQLException ex) {
+                System.out.println(ex);
+                }
             }
         });
+
     
-    }
+    }//fin del metodo LogicaBotones
    
 
     
@@ -236,20 +245,7 @@ public static String user = "";
     }//GEN-LAST:event_Boton_AccederActionPerformed
 
     
-    
-private void BotonInicio(){
-    Boton_Acceder.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                BotonIniciar();
-            } catch (SQLException ex) {
-                System.out.println(ex);
-            }
-        }
-    });
-
-}    
+   
     
 public void BotonIniciar() throws SQLException{
 
@@ -262,12 +258,13 @@ public void BotonIniciar() throws SQLException{
           
             try{
                 Connection conn = con.Conectar();
-                PreparedStatement stmt = conn.prepareStatement("SELECT permiso FROM usuarios WHERE usuario = '"+usuarioIngresado+"' AND contrasena = '"+contrasenaIngresada+"'");
+                PreparedStatement stmt = conn.prepareStatement("SELECT permiso,usuario FROM usuarios WHERE usuario = '"+usuarioIngresado+"' AND contrasena = '"+contrasenaIngresada+"'");
           
                 ResultSet result = stmt.executeQuery();
                 while(result.next()){
                     String permiso1 = result.getString("permiso");
-                
+                    usuario = result.getString("usuario");
+                    System.out.println(usuario);
                     if(permiso1.equalsIgnoreCase("Administrador")){             
                         abrirVentanaProgreso();
                         Cont=1;
@@ -288,10 +285,11 @@ public void BotonIniciar() throws SQLException{
 
     
 private void abrirVentanaProgreso() {
+    dispose();
     VentanaProgreso ventanaProgreso = new VentanaProgreso();
     ventanaProgreso.setVisible(true);
     // Cerrar la ventana actual de inicio de sesión
-    dispose();
+    
 }//fin del metodo abrirVentanaProgreso
      
      //barra de carga
@@ -329,14 +327,15 @@ class VentanaProgreso extends JFrame {
                 if (progreso == 100) {
                     
                     if(Cont==1){
-                     
-                        abrirVentanaAdmin(); 
-                        dispose();
+                         dispose();
+                        new MenuPrincipal().setVisible(true);
+                        
                     }else{
-                        AbrirVentanaEmpleado();
-                        dispose();
+                         dispose();
+                         new MenuPrincipalEmpleado().setVisible(true);
+                  
                     }
-                   
+                    
                 }//Fin del if progreso terminado
             }
         });//Fin de crear temporizador
@@ -347,13 +346,9 @@ class VentanaProgreso extends JFrame {
 }//Fin de Ventana progreso
 
     
-private void abrirVentanaAdmin() {
-    new MenuPrincipal().setVisible(true);
-}//metodoAbrir VentanaPrincipal
+
     
-private void AbrirVentanaEmpleado(){
-    new MenuPrincipalEmpleado().setVisible(true);
-}
+
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

@@ -27,6 +27,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.text.JTextComponent;
 //----------------------------------------------------------------------------------//
 
@@ -44,12 +45,12 @@ double Descuento ;
 private DefaultTableModel tablaModelo; 
 public  int C;
 public  int TotalC;
-ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icono para JOptionPane
+
 int cantidadDeseada;
 
     public Panel_NuevaVenta() throws SQLException {
-
-        initComponents();   
+        
+        initComponents();  
         DiseñoTabla();
         MostrarSugerencias();
         InsertarProductoTabla();
@@ -181,10 +182,12 @@ int cantidadDeseada;
 
     
     private void LogicaBotones(){
-    BotonFinalizar.addActionListener(new ActionListener() {
+    BotonCobrar.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          JOptionPane.showMessageDialog(null,"Venta Realizada", "Registro-Compra", HEIGHT, iconoFinalizado);
+            FinalizarVenta finalizarventa = new FinalizarVenta();
+            finalizarventa.setVisible(true);
+         
           tablaModelo.setRowCount(0);    
         }
     });
@@ -450,7 +453,7 @@ ComboBoxClientes.addActionListener(new ActionListener() {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaNuevaVenta = new javax.swing.JTable();
-        BotonFinalizar = new javax.swing.JButton();
+        BotonCobrar = new javax.swing.JButton();
         BotonCancelar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         LabelArticulos = new javax.swing.JLabel();
@@ -527,10 +530,10 @@ ComboBoxClientes.addActionListener(new ActionListener() {
         TablaNuevaVenta.setRowMargin(4);
         jScrollPane1.setViewportView(TablaNuevaVenta);
 
-        BotonFinalizar.setBackground(new java.awt.Color(0, 153, 51));
-        BotonFinalizar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        BotonFinalizar.setForeground(new java.awt.Color(255, 255, 255));
-        BotonFinalizar.setText("Finalizar");
+        BotonCobrar.setBackground(new java.awt.Color(0, 153, 51));
+        BotonCobrar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        BotonCobrar.setForeground(new java.awt.Color(255, 255, 255));
+        BotonCobrar.setText("Cobrar");
 
         BotonCancelar.setBackground(new java.awt.Color(204, 0, 0));
         BotonCancelar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -590,7 +593,7 @@ ComboBoxClientes.addActionListener(new ActionListener() {
                         .addGap(10, 10, 10)
                         .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(14, 14, 14)
-                        .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BotonCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41))
                     .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -612,7 +615,7 @@ ComboBoxClientes.addActionListener(new ActionListener() {
                         .addGap(10, 10, 10)
                         .addGroup(Panel_BackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BotonFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(BotonCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(Panel_BackgroundLayout.createSequentialGroup()
                         .addComponent(BotonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22)
@@ -641,8 +644,8 @@ ComboBoxClientes.addActionListener(new ActionListener() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonCancelar;
+    private javax.swing.JButton BotonCobrar;
     private javax.swing.JButton BotonEliminar;
-    private javax.swing.JButton BotonFinalizar;
     private javax.swing.JComboBox<String> ComboBoxClientes;
     private javax.swing.JComboBox<String> ComboBoxSugerencia;
     private javax.swing.JLabel LabelArticulos;

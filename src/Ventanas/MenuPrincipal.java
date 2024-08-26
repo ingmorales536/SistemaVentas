@@ -31,10 +31,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         BotonSoporte.setBorderPainted(false); // Ocultar el borde del botón
         BotonSoporte.setFocusPainted(false); // Evitar que se pinte el borde al tener el foco
         BotonSoporte.setContentAreaFilled(false);
+        ObtenerUsuario();
     }//fin del constructor
     
- 
- 
+    private void ObtenerUsuario(){
+        Login user = new Login();
+        String Usuario = user.usuario;
+        LabelUser.setText("Sesion de  "+Usuario);
+    }
     
     @Override
     public Image getIconImage(){
@@ -241,7 +245,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         Panel_Fecha = new javax.swing.JPanel();
         Boton_registroVentas = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        LabelUser = new javax.swing.JLabel();
         Label_Fecha = new javax.swing.JLabel();
         BotonSoporte = new javax.swing.JButton();
         Panel_Ventanas = new javax.swing.JPanel();
@@ -405,9 +409,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Boton_registroVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RegistroVentas.png"))); // NOI18N
         Boton_registroVentas.setBorder(null);
 
-        jLabel2.setFont(new java.awt.Font("UD Digi Kyokasho NK-R", 0, 16)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Sesion de {user}");
+        LabelUser.setFont(new java.awt.Font("UD Digi Kyokasho NK-R", 0, 16)); // NOI18N
+        LabelUser.setForeground(new java.awt.Color(255, 255, 255));
+        LabelUser.setText("Sesion de {user}");
 
         Label_Fecha.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         Label_Fecha.setForeground(new java.awt.Color(255, 255, 255));
@@ -426,7 +430,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addGroup(Panel_FechaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Label_Fecha, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(LabelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(216, 216, 216)
                 .addComponent(Boton_registroVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -438,7 +442,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(Panel_FechaLayout.createSequentialGroup()
                 .addComponent(Label_Fecha)
                 .addGap(0, 0, 0)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LabelUser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(Panel_FechaLayout.createSequentialGroup()
                 .addContainerGap()
@@ -516,13 +520,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton BotonSoporte;
     private javax.swing.JButton BotonUsuarios;
     private javax.swing.JButton Boton_registroVentas;
+    private javax.swing.JLabel LabelUser;
     private javax.swing.JLabel Label_Fecha;
     private javax.swing.JPanel Panel_Background;
     private javax.swing.JPanel Panel_Fecha;
     private javax.swing.JPanel Panel_Menu;
     private static javax.swing.JPanel Panel_Ventanas;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables

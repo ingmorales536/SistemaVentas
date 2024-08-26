@@ -61,7 +61,7 @@
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="BotonCancelar" min="-2" pref="146" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                          <Component id="BotonFinalizar" min="-2" pref="142" max="-2" attributes="0"/>
+                          <Component id="BotonCobrar" min="-2" pref="142" max="-2" attributes="0"/>
                           <EmptySpace min="41" pref="41" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -89,7 +89,7 @@
                           <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="BotonCancelar" alignment="0" min="-2" pref="53" max="-2" attributes="0"/>
-                              <Component id="BotonFinalizar" alignment="0" min="-2" pref="53" max="-2" attributes="0"/>
+                              <Component id="BotonCobrar" alignment="0" min="-2" pref="53" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -315,7 +315,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="BotonFinalizar">
+        <Component class="javax.swing.JButton" name="BotonCobrar">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="99" red="0" type="rgb"/>
@@ -326,7 +326,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Finalizar"/>
+            <Property name="text" type="java.lang.String" value="Cobrar"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="BotonCancelar">

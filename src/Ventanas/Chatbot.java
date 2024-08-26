@@ -15,7 +15,9 @@ import java.util.Random;
  * @author Armando
  */
 public class Chatbot extends javax.swing.JFrame {
-String user;
+    
+Login Usuario = new Login();
+String user = Usuario.usuario;
     /**
      * Creates new form Chatbot
      */
