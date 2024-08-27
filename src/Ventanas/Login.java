@@ -259,7 +259,6 @@ public void BotonIniciar() throws SQLException{
             try{
                 Connection conn = con.Conectar();
                 PreparedStatement stmt = conn.prepareStatement("SELECT permiso,usuario FROM usuarios WHERE usuario = '"+usuarioIngresado+"' AND contrasena = '"+contrasenaIngresada+"'");
-          
                 ResultSet result = stmt.executeQuery();
                 while(result.next()){
                     String permiso1 = result.getString("permiso");

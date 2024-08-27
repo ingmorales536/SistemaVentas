@@ -56,7 +56,6 @@ int cantidadDeseada;
         InsertarProductoTabla();
         SumaTotal();
         LogicaBotones();
-        EliminarArticulo();
         DescuentoTotal();
         ObtenerClientes();
     }//Fin del constructor
@@ -67,9 +66,9 @@ int cantidadDeseada;
         stmt = conexion.prepareStatement("SELECT nombre,apellidopaterno FROM clientes");
         ResultSet resultSet = stmt.executeQuery();
             while (resultSet.next()) {
-                String nombre = resultSet.getNString("nombre");
-                String apellido = resultSet.getNString("apellidopaterno");
-                ComboBoxClientes.addItem(nombre);
+                String nombre = resultSet.getString("nombre");
+                String apellido = resultSet.getString("apellidopaterno");
+                ComboBoxClientes.addItem(nombre+" "+apellido);
             }
             resultSet.close();
             stmt.close();
@@ -116,7 +115,55 @@ int cantidadDeseada;
     
 }//Fin del método InsertarProductoEnLaTabla
 
-    private void EliminarArticulo(){
+
+        
+    public void DiseñoTabla(){
+         tablaModelo = new DefaultTableModel();
+           tablaModelo.addColumn("Cantidad");
+           tablaModelo.addColumn("Código");
+           tablaModelo.addColumn("DESCRIPCION");
+           tablaModelo.addColumn("PRECIO COMPRA");
+           tablaModelo.addColumn("PRECIO VENTA");
+           tablaModelo.addColumn("PRECIO + DESCUENTO");
+           tablaModelo.addColumn("ITEMS DISPONIBLES");
+           // Asignar el modelo de datos al TablaNuevaVenta
+           TablaNuevaVenta.setModel(tablaModelo);
+           ComboBoxSugerencia.setEditable(false);
+    // Configurar el renderizador para los encabezados
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(java.awt.Color.black); // Color de fondo
+        headerRenderer.setForeground(java.awt.Color.white); // Color de fuente
+        
+        // Aplicar el renderizador a los encabezados de la tabla
+        for (int i = 0; i < TablaNuevaVenta.getColumnCount(); i++) {
+            TablaNuevaVenta.getTableHeader().getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
+        }
+        
+
+    }//Fin del Metodo DiseñoTabla
+    
+
+    
+    private void LogicaBotones(){
+        BotonCobrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FinalizarVenta finalizarventa = new FinalizarVenta();
+                finalizarventa.setVisible(true);
+
+            }
+        });
+        
+        BotonCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 int option = JOptionPane.showConfirmDialog(null, "¿Desea Cancelar?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                  if (option == JOptionPane.YES_OPTION) {
+                                    tablaModelo.setRowCount(0); 
+                                 }
+            }
+        });
+    
         
         BotonEliminar.addActionListener(new ActionListener() {
             @Override
@@ -149,54 +196,6 @@ int cantidadDeseada;
                 }
             }
         });
-        
-    }
-
-  
-        
-    public void DiseñoTabla(){
-         tablaModelo = new DefaultTableModel();
-           tablaModelo.addColumn("Cantidad");
-           tablaModelo.addColumn("Código");
-           tablaModelo.addColumn("DESCRIPCION");
-           tablaModelo.addColumn("PRECIO COMPRA");
-           tablaModelo.addColumn("PRECIO VENTA");
-           tablaModelo.addColumn("PRECIO + DESCUENTO");
-           tablaModelo.addColumn("ITEMS DISPONIBLES");
-           // Asignar el modelo de datos al TablaNuevaVenta
-           TablaNuevaVenta.setModel(tablaModelo);
-           ComboBoxSugerencia.setEditable(false);
-    // Configurar el renderizador para los encabezados
-        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setBackground(java.awt.Color.black); // Color de fondo
-        headerRenderer.setForeground(java.awt.Color.white); // Color de fuente
-        
-        // Aplicar el renderizador a los encabezados de la tabla
-        for (int i = 0; i < TablaNuevaVenta.getColumnCount(); i++) {
-            TablaNuevaVenta.getTableHeader().getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
-        }
-        
-
-    }//Fin del Metodo DiseñoTabla
-    
-
-    
-    private void LogicaBotones(){
-    BotonCobrar.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            FinalizarVenta finalizarventa = new FinalizarVenta();
-            finalizarventa.setVisible(true);
-         
-          tablaModelo.setRowCount(0);    
-        }
-    });
-    BotonCancelar.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-              tablaModelo.setRowCount(0);
-        }
-    });
   
     
     }//fin metodo logicabotones
@@ -260,7 +259,7 @@ private void ObtenerSugerencias() throws SQLException {
         List<String> sugerencias = new ArrayList<>();
         try {
     
-            stmt = conexion.prepareStatement("SELECT descripcion FROM productos WHERE descripcion LIKE ?");
+            stmt = conexion.prepareStatement("SELECT descripcion FROM productos WHERE codigo LIKE ?");
             stmt.setString(1, "%" + keyword + "%");
              resultSet = stmt.executeQuery();
             while (resultSet.next()) {
@@ -401,10 +400,13 @@ private void Ganancias(){
 
 
 public void ObtenerDescuento() throws SQLException{ 
-    String cliente = (String) ComboBoxClientes.getSelectedItem();
-    stmt = conexion.prepareStatement("SELECT descuento FROM clientes WHERE nombre = ?");
-    stmt.setString(1,cliente);
+    String cliente= (String) ComboBoxClientes.getSelectedItem();
     
+    String[] NombreCompletoCliente = cliente.split(" ");
+    String nombre = NombreCompletoCliente[0];
+    String apellido = NombreCompletoCliente[1];
+    
+    stmt = conexion.prepareStatement("SELECT descuento FROM clientes WHERE nombre = '"+nombre+"' AND apellidopaterno = '"+apellido+"'");
     resultSet = stmt.executeQuery();
     while(resultSet.next()){
         descuento = resultSet.getString("descuento");
