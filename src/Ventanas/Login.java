@@ -28,16 +28,13 @@ import ConexionDB.Conexion;
 
 public class Login extends javax.swing.JFrame{
     
-    
 
 Conexion con = new Conexion();
 
-//usuario y contraseña ingresadas
-static String usuarioIngresado = "";
-String contrasenaIngresada = "";
 
+String usuarioIngresado = "";//usuario ingresadas
+String contrasenaIngresada = "";//contraseña ingresada
 public int Cont = 0;//Metodo bandera
-
 public static String usuario;//Obtener usuario
   
     public Login() {
@@ -259,7 +256,6 @@ public void BotonIniciar() throws SQLException{
             try{
                 Connection conn = con.Conectar();
                 PreparedStatement stmt = conn.prepareStatement("SELECT permiso,usuario FROM usuarios WHERE usuario = '"+usuarioIngresado+"' AND contrasena = '"+contrasenaIngresada+"'");
-          
                 ResultSet result = stmt.executeQuery();
                 while(result.next()){
                     String permiso1 = result.getString("permiso");
@@ -309,9 +305,9 @@ class VentanaProgreso extends JFrame {
         progressBar.setStringPainted(true); // Mostrar el porcentaje de carga
 
         // Cambiar el color de la barra de progreso (en este caso, rojo)
-        UIManager.put("ProgressBar.foreground", Color.RED);
+        UIManager.put("ProgressBar.foreground", Color.blue);
         UIManager.put("ProgressBar.selectionForeground", Color.WHITE);
-        UIManager.put("ProgressBar.selectionBackground", Color.RED);
+        UIManager.put("ProgressBar.selectionBackground", Color.blue);
 
         add(progressBar, BorderLayout.CENTER);
 

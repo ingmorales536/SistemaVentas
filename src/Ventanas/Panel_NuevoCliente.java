@@ -47,7 +47,8 @@ ModeloClientes userEdition;
                 txtApellidoPaterno.setText(userEdition.getApellidoPaterno());
                 txtApellidoMaterno.setText(userEdition.getApellidoMaterno());  
                 txtTelefono.setText(userEdition.getTelefono());
-                txtDescuento.setText(userEdition.getDireccion());
+                txtDireccion.setText(userEdition.getDireccion());
+                txtDescuento.setText(userEdition.getDescuento());
             }
         }
     }//Fin del metodo estilos

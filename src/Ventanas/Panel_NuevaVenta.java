@@ -22,12 +22,6 @@ import Implementaciones.ProveedoresImpl;
 import interfaces.InterfaceProveedores;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.awt.image.ImageObserver.HEIGHT;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.text.JTextComponent;
 //----------------------------------------------------------------------------------//
 
@@ -46,7 +40,8 @@ private DefaultTableModel tablaModelo;
 public  int C;
 public  int TotalC;
 
-int cantidadDeseada;
+//Obtener total
+public static double TotalVenta = 0.0;
 
     public Panel_NuevaVenta() throws SQLException {
         
@@ -155,7 +150,7 @@ int cantidadDeseada;
   
         
     public void DiseñoTabla(){
-         tablaModelo = new DefaultTableModel();
+           tablaModelo = new DefaultTableModel();
            tablaModelo.addColumn("Cantidad");
            tablaModelo.addColumn("Código");
            tablaModelo.addColumn("DESCRIPCION");
@@ -185,10 +180,15 @@ int cantidadDeseada;
     BotonCobrar.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            FinalizarVenta finalizarventa = new FinalizarVenta();
-            finalizarventa.setVisible(true);
-         
-          tablaModelo.setRowCount(0);    
+            
+            try {
+                FinalizarVenta   finalizarventa = new FinalizarVenta();
+                finalizarventa.setVisible(true);
+            } catch (SQLException ex) {
+                System.out.println("Error en Ventana FinalizarVenta: "+ ex);
+                JOptionPane.showMessageDialog(null, "Error al finaliza Venta","Error en venta",1);
+            }
+          //tablaModelo.setRowCount(0);    
         }
     });
     BotonCancelar.addActionListener(new ActionListener() {
@@ -260,10 +260,11 @@ private void ObtenerSugerencias() throws SQLException {
         List<String> sugerencias = new ArrayList<>();
         try {
     
-            stmt = conexion.prepareStatement("SELECT descripcion FROM productos WHERE descripcion LIKE ?");
+            stmt = conexion.prepareStatement("SELECT descripcion,codigo FROM productos WHERE codigo LIKE ?");
             stmt.setString(1, "%" + keyword + "%");
              resultSet = stmt.executeQuery();
             while (resultSet.next()) {
+                
                 sugerencias.add(resultSet.getString("descripcion")); 
             }
             resultSet.close();
@@ -280,7 +281,6 @@ private void ObtenerSugerencias() throws SQLException {
    
 
 private void InsertarSugerenciaTabla(String selectedItem) throws SQLException {
-    con.Conectar();
     double PrecioVenta = 0.0;
     double precioFinal = 0.0;
     double operacion = 0.0;
@@ -306,7 +306,7 @@ private void InsertarSugerenciaTabla(String selectedItem) throws SQLException {
             // Validar la cantidad ingresada
             if (cantidadDeseada > 0 && cantidadDeseada <= itemsDisponibles) {
                 // Calcular el precioFinal para la primera vez
-                PrecioVenta = precioVenta; // Asumimos que PrecioVenta es igual a precioVenta la primera vez
+                PrecioVenta = precioVenta; 
                 operacion = (PrecioVenta * Descuento) / 100;
                 precioFinal = PrecioVenta - operacion;
                 System.out.println("-----Precio final: " + precioFinal);
@@ -350,15 +350,19 @@ private void SumaTotal(){
 }//Fin del metodo SumaTotal
 
 
-private void actualizarTotal() {
-         double total = 0.0;
+public void actualizarTotal() {
+        double total = 0.0;
+        
+        System.out.println("Total de venta: " + TotalVenta);
         for (int fila = 0; fila < TablaNuevaVenta.getRowCount(); fila++) {
             int cantidad = Integer.parseInt(TablaNuevaVenta.getValueAt(fila, 0).toString());
             double precioVenta = Double.parseDouble(TablaNuevaVenta.getValueAt(fila, 4).toString());
             double subtotal = cantidad * precioVenta;
-            total += subtotal;
+            total+= subtotal;  
         }
-        LabelTotal.setText("Total: " + total); // Actualizar el texto del JLabel con el total calculado
+        TotalVenta = total;
+        LabelTotal.setText("Total: " + total);
+    
     }//Fin del metodo ActualizarTotal
 
 
@@ -384,7 +388,7 @@ private void Ganancias(){
     
     for(int x = 0; x < cantidadFilas; x++){
         compra = (double) modelo.getValueAt(x, 3);
-        venta = (double) modelo.getValueAt(x, 4);
+        venta = (double) modelo.getValueAt(x, 5);
         items = (int) modelo.getValueAt(x, 0);
         
         // Realiza la operación para cada fila

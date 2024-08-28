@@ -7,6 +7,9 @@ package Ventanas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.awt.image.ImageObserver.HEIGHT;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -20,11 +23,19 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
     /**
      * Creates new form FinalizarVenta
      */
-    public FinalizarVenta() {
+    public FinalizarVenta() throws SQLException {
         initComponents();
         DiseñoVentana();
         LogicaBotones();
+        ObtenerTotal();
 
+    }
+    
+    private void ObtenerTotal() throws SQLException{
+    Panel_NuevaVenta total= new Panel_NuevaVenta();
+    double Total = total.TotalVenta;
+    LabelTotal.setText("Total: "+Total);
+        
     }
 
     private void DiseñoVentana() {
@@ -64,8 +75,9 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
 
         jPanel1 = new javax.swing.JPanel();
         TxtRecibo = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        LabelTotal = new javax.swing.JLabel();
         BotonFinalizar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,16 +91,21 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
         TxtRecibo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recibo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel1.add(TxtRecibo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 270, 60));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Cambio: $0.00");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, -1));
+        LabelTotal.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
+        LabelTotal.setForeground(new java.awt.Color(255, 255, 255));
+        LabelTotal.setText("Total: $0.00");
+        jPanel1.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 250, -1));
 
         BotonFinalizar.setBackground(new java.awt.Color(0, 204, 51));
         BotonFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BotonFinalizar.setForeground(new java.awt.Color(255, 255, 255));
         BotonFinalizar.setText("Finalizar");
         jPanel1.add(BotonFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 140, 40));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Cambio: $0.00");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,15 +148,20 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FinalizarVenta().setVisible(true);
+                try {
+                    new FinalizarVenta().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FinalizarVenta.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonFinalizar;
+    private javax.swing.JLabel LabelTotal;
     private javax.swing.JTextField TxtRecibo;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
