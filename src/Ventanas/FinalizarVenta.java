@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Ventanas;
 
 import java.awt.event.ActionEvent;
@@ -20,15 +17,13 @@ import javax.swing.JOptionPane;
  */
 public class FinalizarVenta extends javax.swing.JFrame {
 ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icono para JOptionPane
-    /**
-     * Creates new form FinalizarVenta
-     */
+
     public FinalizarVenta() throws SQLException {
         initComponents();
         DiseñoVentana();
         LogicaBotones();
         ObtenerTotal();
-
+        cambio();
     }
     
     private void ObtenerTotal() throws SQLException{
@@ -60,8 +55,20 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
            }
        });
    
-   }
-    
+   }//fin logicabotones
+   
+   
+   
+  private void cambio()throws SQLException{
+      Panel_NuevaVenta total2= new Panel_NuevaVenta();
+      String recibido = TxtRecibo.getText();
+      double Total = total2.TotalVenta;
+      
+      double Recibi = Double.parseDouble(recibido);
+      double operacion = Total - Recibi;
+      LabelCambio.setText("Cambio: $"+operacion);
+  
+  }
     
     
     
@@ -77,7 +84,7 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
         TxtRecibo = new javax.swing.JTextField();
         LabelTotal = new javax.swing.JLabel();
         BotonFinalizar = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        LabelCambio = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,23 +96,23 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
         TxtRecibo.setForeground(new java.awt.Color(255, 255, 255));
         TxtRecibo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         TxtRecibo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recibo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel1.add(TxtRecibo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 270, 60));
+        jPanel1.add(TxtRecibo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 270, 60));
 
         LabelTotal.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
         LabelTotal.setForeground(new java.awt.Color(255, 255, 255));
         LabelTotal.setText("Total: $0.00");
-        jPanel1.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 250, -1));
+        jPanel1.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 250, -1));
 
         BotonFinalizar.setBackground(new java.awt.Color(0, 204, 51));
         BotonFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BotonFinalizar.setForeground(new java.awt.Color(255, 255, 255));
         BotonFinalizar.setText("Finalizar");
-        jPanel1.add(BotonFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 140, 40));
+        jPanel1.add(BotonFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 140, 40));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Cambio: $0.00");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, -1));
+        LabelCambio.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
+        LabelCambio.setForeground(new java.awt.Color(255, 255, 255));
+        LabelCambio.setText("Cambio: $0.00");
+        jPanel1.add(LabelCambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -159,9 +166,9 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonFinalizar;
+    private javax.swing.JLabel LabelCambio;
     private javax.swing.JLabel LabelTotal;
     private javax.swing.JTextField TxtRecibo;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
