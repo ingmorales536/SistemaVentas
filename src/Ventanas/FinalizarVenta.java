@@ -11,12 +11,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author arman
- */
+
 public class FinalizarVenta extends javax.swing.JFrame {
 ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icono para JOptionPane
+Panel_NuevaVenta total= new Panel_NuevaVenta();
 
     public FinalizarVenta() throws SQLException {
         initComponents();
@@ -27,7 +25,7 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
     }
     
     private void ObtenerTotal() throws SQLException{
-    Panel_NuevaVenta total= new Panel_NuevaVenta();
+    
     double Total = total.TotalVenta;
     LabelTotal.setText("Total: "+Total);
         
@@ -51,7 +49,17 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
            @Override
            public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,"Venta Realizada", "Registro-Compra", HEIGHT, iconoFinalizado);
-                TxtRecibo.setText("");
+                String recibido = TxtRecibo.getText();
+                double Total = total.TotalVenta;
+      
+        if(recibido != ""){
+            double Recibi = Double.parseDouble(recibido);
+            double operacion = Recibi-Total;
+            LabelCambio.setText("Cambio: $"+ operacion);
+           
+        }else{
+           System.out.println("textfile recibido vacio");
+        }
            }
        });
    
@@ -59,19 +67,14 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
    
    
    
-  private void cambio()throws SQLException{
-      Panel_NuevaVenta total2= new Panel_NuevaVenta();
-      String recibido = TxtRecibo.getText();
-      double Total = total2.TotalVenta;
+  private void cambio() throws SQLException{
       
-      double Recibi = Double.parseDouble(recibido);
-      double operacion = Total - Recibi;
-      LabelCambio.setText("Cambio: $"+operacion);
+      
+      
+  }//fin del metodo cambio
+    
+    
   
-  }
-    
-    
-    
     
     
     
@@ -96,18 +99,18 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icon
         TxtRecibo.setForeground(new java.awt.Color(255, 255, 255));
         TxtRecibo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         TxtRecibo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recibo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel1.add(TxtRecibo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 270, 60));
+        jPanel1.add(TxtRecibo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 270, 60));
 
         LabelTotal.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
         LabelTotal.setForeground(new java.awt.Color(255, 255, 255));
         LabelTotal.setText("Total: $0.00");
-        jPanel1.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 250, -1));
+        jPanel1.add(LabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 250, -1));
 
         BotonFinalizar.setBackground(new java.awt.Color(0, 204, 51));
         BotonFinalizar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BotonFinalizar.setForeground(new java.awt.Color(255, 255, 255));
         BotonFinalizar.setText("Finalizar");
-        jPanel1.add(BotonFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 140, 40));
+        jPanel1.add(BotonFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 140, 40));
 
         LabelCambio.setFont(new java.awt.Font("Segoe UI", 0, 34)); // NOI18N
         LabelCambio.setForeground(new java.awt.Color(255, 255, 255));

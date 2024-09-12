@@ -76,12 +76,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     Panel_Ventanas.add(Ventana1,BorderLayout.CENTER);
                     Panel_Ventanas.revalidate();
                     Panel_Ventanas.repaint();
-                } catch (SQLException ex) {
+                } catch (SQLException ex) {    
                     System.out.println("Error en mostrar nueva venta: " + ex);
                 }
                
                 
-            }
+             }
         });  //Fin Accion boton Nueva Venta
         
         BotonClientes.addActionListener(new ActionListener() {

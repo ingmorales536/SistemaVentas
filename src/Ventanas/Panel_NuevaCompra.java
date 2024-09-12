@@ -29,7 +29,7 @@ ModeloCompras userEdition;
     
 private DefaultTableModel modelo;
 Conexion c = new Conexion();
-Connection co = c.Conectar();
+Connection co = c.ConectarBDcloud();
 float sumaTotal = (float) 0.0;
 ImageIcon icono = new ImageIcon("src/Img/eliminar2.png");
 ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");

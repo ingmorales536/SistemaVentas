@@ -29,7 +29,7 @@ public class Panel_NuevaVenta extends javax.swing.JPanel {
     
 //Variables para hacer la conexion y obtener datos
 Conexion con = new Conexion();
-Connection conexion = con.Conectar();
+Connection conexion = con.ConectarBDcloud();
 PreparedStatement stmt;
 ResultSet resultSet;
 //-------------------------
@@ -356,7 +356,7 @@ public void actualizarTotal() {
         System.out.println("Total de venta: " + TotalVenta);
         for (int fila = 0; fila < TablaNuevaVenta.getRowCount(); fila++) {
             int cantidad = Integer.parseInt(TablaNuevaVenta.getValueAt(fila, 0).toString());
-            double precioVenta = Double.parseDouble(TablaNuevaVenta.getValueAt(fila, 4).toString());
+            double precioVenta = Double.parseDouble(TablaNuevaVenta.getValueAt(fila, 5).toString());
             double subtotal = cantidad * precioVenta;
             total+= subtotal;  
         }

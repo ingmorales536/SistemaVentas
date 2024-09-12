@@ -20,7 +20,7 @@ public class ProductosImpl  extends Conexion implements  InterfaceProductos {
     public void Registrar(ModeloProductos producto) {
          try{
             
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("INSERT INTO productos(codigo,descripcion,preciounitario,precioventa,cantidad) VALUES (?, ?, ?, ?, ?)");
           
             stmt.setString(1,producto.getCodigo());
@@ -48,7 +48,7 @@ public class ProductosImpl  extends Conexion implements  InterfaceProductos {
     @Override
     public void Modificar(ModeloProductos producto) {
         try{
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("UPDATE productos SET codigo = ? , descripcion = ? , preciounitario = ? , precioventa = ?, cantidad = ? WHERE id = ?");
           
             stmt.setString(1,producto.getCodigo());
@@ -78,7 +78,7 @@ public class ProductosImpl  extends Conexion implements  InterfaceProductos {
     @Override
     public void Eliminar(int UserId) {
           try{   
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("DELETE FROM productos WHERE id = ?");
             stmt.setInt(1,UserId);
             stmt.execute();
@@ -99,7 +99,7 @@ public class ProductosImpl  extends Conexion implements  InterfaceProductos {
     public List<ModeloProductos> listar(String name) throws Exception {
               List<ModeloProductos> lista = null;
       try{
-          Conectar();
+          ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM productos");
         
           lista= new ArrayList();
@@ -137,7 +137,7 @@ public class ProductosImpl  extends Conexion implements  InterfaceProductos {
     public ModeloProductos getUserById(int userId) throws Exception {
       ModeloProductos ProductosRegistrados = new ModeloProductos();
       try{
-          Conectar();
+          ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM productos WHERE id = ? LIMIT 1;");
           stmt.setInt(1,userId);
 

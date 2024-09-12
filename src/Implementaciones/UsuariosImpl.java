@@ -20,7 +20,7 @@ public class UsuariosImpl extends Conexion implements  InterfaceUsuarios {
     @Override
     public void Registrar(ModeloUsuarios Usuario) {
         try {
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = conexion.prepareStatement("INSERT INTO usuarios(nombre,usuario,contrasena,permiso) VALUE(?,?,?,?)");
             stmt.setString(1, Usuario.getNombre());
             stmt.setString(2, Usuario.getUsuario());
@@ -37,7 +37,7 @@ public class UsuariosImpl extends Conexion implements  InterfaceUsuarios {
     @Override
     public void Modificar(ModeloUsuarios Usuario) {
         try{
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = conexion.prepareStatement("UPDATE usuarios SET nombre = ? , usuario = ? , contrasena = ? , permiso = ? WHERE id = ?");
           
             stmt.setString(1,Usuario.getNombre());
@@ -66,7 +66,7 @@ public class UsuariosImpl extends Conexion implements  InterfaceUsuarios {
     @Override
     public void Eliminar(int Usuario) {
         try{   
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("DELETE FROM usuarios WHERE id = ?");
             stmt.setInt(1,Usuario);
             stmt.execute();
@@ -87,7 +87,7 @@ public class UsuariosImpl extends Conexion implements  InterfaceUsuarios {
     public List<ModeloUsuarios> listar(String name) throws Exception {
            List<ModeloUsuarios> lista = null;
       try{
-          Conectar();
+          ConectarBDcloud();
           PreparedStatement stmt = conexion.prepareStatement("SELECT * FROM usuarios");
         
           lista= new ArrayList();
@@ -123,7 +123,7 @@ public class UsuariosImpl extends Conexion implements  InterfaceUsuarios {
     public ModeloUsuarios getUserById(int userId) throws Exception {
         ModeloUsuarios UsuariosRegistrados = new ModeloUsuarios();
       try{
-          Conectar();
+          ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM usuarios WHERE id = ? LIMIT 1;");
           stmt.setInt(1,userId);
 

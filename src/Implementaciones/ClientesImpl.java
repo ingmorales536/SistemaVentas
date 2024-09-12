@@ -21,7 +21,7 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
     public void Registrar(ModeloClientes cliente) {
         try{
             
-            Conectar();
+             ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("INSERT INTO clientes(nombre, apellidopaterno, apellidomaterno, telefono, direccion, descuento) VALUES (?, ?, ?, ?, ?, ?)");
           
             stmt.setString(1,cliente.getNombre());
@@ -54,7 +54,7 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
     @Override
     public void Modificar(ModeloClientes cliente) {
         try{
-            Conectar();
+             ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("UPDATE clientes SET nombre = ? , apellidopaterno = ? , apellidomaterno = ? , telefono = ?, direccion = ? , descuento = ? WHERE id = ?");
           
             stmt.setString(1,cliente.getNombre());
@@ -86,7 +86,7 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
     @Override
     public void Eliminar(int userId) {
      try{   
-            Conectar();
+             ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("DELETE FROM clientes WHERE id = ?");
             stmt.setInt(1,userId);
             stmt.execute();
@@ -110,7 +110,7 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
     public List<ModeloClientes> listar(String name) throws Exception {
         List<ModeloClientes> lista = null;
       try{
-          Conectar();
+           ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM clientes");
         
           lista= new ArrayList();
@@ -149,7 +149,7 @@ public class ClientesImpl extends Conexion implements  InterfaceClientes{
     public ModeloClientes getUserById(int userId) throws Exception {
        ModeloClientes ClientesRegistrados = new ModeloClientes();
       try{
-          Conectar();
+           ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM clientes WHERE id = ? LIMIT 1;");
           stmt.setInt(1,userId);
 

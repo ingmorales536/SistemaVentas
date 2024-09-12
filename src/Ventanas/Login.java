@@ -255,7 +255,7 @@ public void BotonIniciar() throws SQLException{
         }else{
           
             try{
-                Connection conn = con.Conectar();
+                Connection conn = con.ConectarBDcloud();
                 PreparedStatement stmt = conn.prepareStatement("SELECT permiso,usuario FROM usuarios WHERE usuario = '"+usuarioIngresado+"' AND contrasena = '"+contrasenaIngresada+"'");
                 ResultSet result = stmt.executeQuery();
                 while(result.next()){
