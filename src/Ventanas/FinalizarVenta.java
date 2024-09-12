@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 public class FinalizarVenta extends javax.swing.JFrame {
 ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");//icono para JOptionPane
 Panel_NuevaVenta total= new Panel_NuevaVenta();
-
+int n=0;
     public FinalizarVenta() throws SQLException {
         initComponents();
         DiseñoVentana();
@@ -49,17 +49,7 @@ Panel_NuevaVenta total= new Panel_NuevaVenta();
            @Override
            public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,"Venta Realizada", "Registro-Compra", HEIGHT, iconoFinalizado);
-                String recibido = TxtRecibo.getText();
-                double Total = total.TotalVenta;
-      
-        if(recibido != ""){
-            double Recibi = Double.parseDouble(recibido);
-            double operacion = Recibi-Total;
-            LabelCambio.setText("Cambio: $"+ operacion);
-           
-        }else{
-           System.out.println("textfile recibido vacio");
-        }
+                n=1;
            }
        });
    
@@ -69,7 +59,23 @@ Panel_NuevaVenta total= new Panel_NuevaVenta();
    
   private void cambio() throws SQLException{
       
+              String recibido = TxtRecibo.getText();
+                double Total = total.TotalVenta;
+      while(n==1) {
       
+           if(recibido.isEmpty()){
+              System.out.println("textfile recibido vacio");
+           
+        }else{
+            double Recibi = Double.parseDouble(recibido);
+            double operacion = Recibi-Total;   
+            LabelCambio.setText("Cambio: $"+ operacion);
+            System.out.println("cambio" + operacion);
+        }
+      
+      }
+       
+         
       
   }//fin del metodo cambio
     

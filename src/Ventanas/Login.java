@@ -24,13 +24,12 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import ConexionDB.Conexion;
 
-//prueba siuu
 
 
 public class Login extends javax.swing.JFrame{
     
 
-Conexion con = new Conexion();
+Conexion con = new Conexion();//objeto para crear la conexion
 
 
 String usuarioIngresado = "";//usuario ingresadas
