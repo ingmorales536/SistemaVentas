@@ -53,7 +53,23 @@ public class ComprasImpl  extends Conexion implements  InterfaceCompras{
 
     @Override
     public void Eliminar(int UserId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+         try{   
+             ConectarBDcloud();
+            PreparedStatement stmt = this.conexion.prepareStatement("DELETE FROM compras WHERE id = ?");
+            stmt.setInt(1,UserId);
+            stmt.execute();
+            stmt.close();  
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e, "Erro al eliminar Compra", 0);
+             System.out.println("Error en eliminar compra: "+e);
+        }finally{
+            try {
+                CerrarConexion();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al Cerrar la conexion BD", "Error en DB-Clientes", 0);
+            }
+        }
     }
 
     @Override

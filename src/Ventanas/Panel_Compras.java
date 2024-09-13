@@ -74,6 +74,38 @@ public class Panel_Compras extends javax.swing.JPanel {
             }
         });//Fin del boton Editar
     
+        
+     BotonEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("seleccionado eliminar");
+                if(TablaCompras.getSelectedRow() > -1){
+                     
+                    DefaultTableModel model = (DefaultTableModel) TablaCompras.getModel();
+                    InterfaceCompras dao = new ComprasImpl();
+                    for(int x : TablaCompras.getSelectedRows()){
+
+                        try{
+                           int option = JOptionPane.showConfirmDialog(null, "¿Desea Eliminar el Cliente?", "Confirmación", JOptionPane.YES_NO_OPTION);
+
+                                 if (option == JOptionPane.YES_OPTION) {
+                                    dao.Eliminar((int) TablaCompras.getValueAt(x, 0));
+                                    model.removeRow(x);
+                                 }
+                        }catch(Exception error){
+                            System.out.println("");
+                        }
+
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null,
+                "<html><body><h3 style='color:red;'>Seleccione un Cliente</h3>",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+                 }
+               
+            }
+     });
     
     }  
     
