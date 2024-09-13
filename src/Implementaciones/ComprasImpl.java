@@ -27,7 +27,7 @@ public class ComprasImpl  extends Conexion implements  InterfaceCompras{
     @Override
     public void Modificar(ModeloCompras producto) {
            try{
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("UPDATE compras SET fecha = ?  ,  proveedor = ? , articulos = ? , total = ? , vendedor = ? WHERE id = ?");
           
             stmt.setString(1,producto.getFecha());
@@ -60,7 +60,7 @@ public class ComprasImpl  extends Conexion implements  InterfaceCompras{
     public List<ModeloCompras> listar(String name) throws Exception {
        List<ModeloCompras> lista = null;
       try{
-          Conectar();
+          ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM compras");
         
           lista= new ArrayList();

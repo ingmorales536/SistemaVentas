@@ -218,7 +218,7 @@ ImageIcon iconoFinalizado = new ImageIcon("src/Img/CompraFinalizada.png");
                     String[] meses = {"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
                     String fecha = dia + "/" + meses[month - 1] + "/" + year;     
                     String proveedor = (String) ComboBoxProveedores.getSelectedItem();
-                    String vendedor = "Armando";    
+                    String vendedor = Login.usuario;    
 
                     // StringBuilder 
                     StringBuilder articulosAgregados = new StringBuilder();

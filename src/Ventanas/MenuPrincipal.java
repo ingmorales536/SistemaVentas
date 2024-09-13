@@ -33,8 +33,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//fin del constructor
     
     private void ObtenerUsuario(){
-        Login user = new Login();
-        String Usuario = user.usuario;
+       
+        String Usuario = Login.usuario;
         LabelUser.setText("Sesion de  "+Usuario);
     }
     

@@ -21,7 +21,7 @@ public class ProveedoresImpl  extends Conexion implements InterfaceProveedores{
     public void Registrar(ModeloProveedores proveedor) {
       try{
             
-            Conectar();
+           ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("INSERT INTO proveedores(nombre, direccion,telefono) VALUES (?, ?, ?)");
           
             stmt.setString(1,proveedor.getNombre());
@@ -49,7 +49,7 @@ public class ProveedoresImpl  extends Conexion implements InterfaceProveedores{
     @Override
     public void Modificar(ModeloProveedores proveedor) {
            try{
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("UPDATE proveedores SET nombre = ?  ,  direccion = ? , telefono = ? WHERE id = ?");
           
             stmt.setString(1,proveedor.getNombre());
@@ -77,7 +77,7 @@ public class ProveedoresImpl  extends Conexion implements InterfaceProveedores{
     @Override
     public void Eliminar(int userId) {
          try{   
-            Conectar();
+            ConectarBDcloud();
             PreparedStatement stmt = this.conexion.prepareStatement("DELETE FROM proveedores WHERE id = ?");
             stmt.setInt(1,userId);
             stmt.execute();
@@ -98,7 +98,7 @@ public class ProveedoresImpl  extends Conexion implements InterfaceProveedores{
     public List<ModeloProveedores> listar(String name) {
        List<ModeloProveedores> lista = null;
       try{
-          Conectar();
+          ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM proveedores");
         
           lista= new ArrayList();
@@ -134,7 +134,7 @@ public class ProveedoresImpl  extends Conexion implements InterfaceProveedores{
     public ModeloProveedores getUserById(int userId) throws Exception {
           ModeloProveedores ProveedoresRegistrados = new ModeloProveedores();
       try{
-          Conectar();
+          ConectarBDcloud();
           PreparedStatement stmt = this.conexion.prepareStatement("SELECT * FROM proveedores WHERE id = ? LIMIT 1;");
           stmt.setInt(1,userId);
 
